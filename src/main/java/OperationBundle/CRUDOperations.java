@@ -3,9 +3,12 @@ package OperationBundle;
 import Model.Employee;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 public class CRUDOperations
 {
-    public static void insert(Employee emp,Connection conn) throws SQLException
+    public static int insert(Employee emp,Connection conn) throws SQLException
     {
         PreparedStatement preparedStatement=conn.prepareStatement("insert into employee(name,city,age,deptName) values(?,?,?,?)");
         preparedStatement.setString(1,emp.getName());
@@ -14,19 +17,24 @@ public class CRUDOperations
         preparedStatement.setString(4,emp.getDeptName());
 
         int i=preparedStatement.executeUpdate();
-        System.out.println(i+" record inserted..");
+        if(i>0)
+            return i;
+        else
+            return -1;
     }
 
-    public static void delete(int id,Connection conn) throws SQLException
+    public static int delete(int id,Connection conn) throws SQLException
     {
         PreparedStatement stmt=conn.prepareStatement("delete from employee where id=?");
         stmt.setInt(1,id);
 
         int i=stmt.executeUpdate();
-        System.out.println(i+" record deleted..");
+        if(i>0)
+        return i;
+            else return -1;
     }
 
-    public static void update(int id, Employee emp, Connection conn) throws SQLException
+    public static int update(int id, Employee emp, Connection conn) throws SQLException
     {
 
         PreparedStatement preparedStatement=conn.prepareStatement("update employee set name=?,city=?,age=?,deptName=? where id=?");
@@ -36,17 +44,25 @@ public class CRUDOperations
         preparedStatement.setString(4,emp.getDeptName());
         preparedStatement.setInt(5,id);
         int i=preparedStatement.executeUpdate();
-        System.out.println(i+" record updated..");
+        if(i>0)
+            return i;
+        else
+            return -1;
     }
 
-    public static void display(Connection conn) throws SQLException
+    public static List<String> display(Connection conn) throws SQLException
     {
         PreparedStatement stmt=conn.prepareStatement("select * from employee");
         ResultSet rs=stmt.executeQuery();
+        String result;
+        List<String> list=new ArrayList<>();
         while(rs.next())
         {
-            System.out.println(rs.getInt(1)+" "+rs.getString(2)+" "+rs.getString(3)+" "+rs.getInt(4)+" "+rs.getString(5));
+            result=rs.getInt(1)+" "+rs.getString(2)+" "+rs.getString(3)+" "+rs.getInt(4)+" "+rs.getString(5);
+            list.add(result);
         }
+
+       return list;
     }
 
 

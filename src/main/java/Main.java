@@ -15,26 +15,24 @@ public class Main
     public static final String USER = "root";
     public static final String PASS = "root";
 
-    public static void main(String args[]) throws IOException
-    {
+    public static void main(String args[]) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        Model.Employee emp=  new Model.Employee();
-
+        Model.Employee emp = new Model.Employee();
+        System.out.println("Enter 'y' for continuing..");
+        String ans=reader.readLine();
+        do {
         int choice;
-        try
-        {
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             System.out.println("Press : \n 1:Insert \n 2:Delete \n 3:Update \n 4:Display ");
             String option = reader.readLine();
 
-            choice=Integer.parseInt(option);
+            choice = Integer.parseInt(option);
 
 
-            switch(choice)
-            {
-                case 1:
-                {
+            switch (choice) {
+                case 1: {
                     System.out.println("Enter name, city, age, deptName");
                     String empInfo = reader.readLine();
                     String[] splited = empInfo.split("\\s+");
@@ -43,22 +41,20 @@ public class Main
                     emp.setAge(Integer.parseInt(splited[2]));
                     emp.setDeptName(splited[3]);
 
-                    CRUDOperations.insert(emp,conn);
+                    System.out.println(CRUDOperations.insert(emp, conn));
                 }
-                        break;
-                case 2:
-                    {
-                        System.out.println("Enter id to be deleted");
-                        String id=reader.readLine();
+                break;
+                case 2: {
+                    System.out.println("Enter id to be deleted");
+                    String id = reader.readLine();
 
-                        CRUDOperations.delete(Integer.parseInt(id),conn);
-                    }
-                        break;
-                case 3:
-                {
+                    System.out.println(CRUDOperations.delete(Integer.parseInt(id), conn));
+                }
+                break;
+                case 3: {
                     System.out.println("Enter id whose record is to be updated");
                     String id1 = reader.readLine();
-                    int id= Integer.parseInt(id1);
+                    int id = Integer.parseInt(id1);
                     System.out.println("Enter new details.(name, city, age, deptName)");
                     String empInfo = reader.readLine();
 
@@ -68,22 +64,21 @@ public class Main
                     emp.setAge(Integer.parseInt(splited[2]));
                     emp.setDeptName(splited[3]);
 
-                    CRUDOperations.update(id,emp,conn);
+                    System.out.println(CRUDOperations.update(id, emp, conn));
                 }
                 break;
-                case 4:
-                {
-                    CRUDOperations.display(conn);
+                case 4: {
+                    List<String> list = CRUDOperations.display(conn);
+                    System.out.println(list);
                 }
                 break;
-                default: System.out.println("Wrong option selected");
+                default:
+                    System.out.println("Wrong option selected");
             }
 
-        }
-        catch(Exception se)
-        {
+        } catch (Exception se) {
             se.printStackTrace();
         }
-        System.out.println("Goodbye!");
+    }while(ans.equals("y"));
     }
 }
