@@ -1,4 +1,4 @@
-package OperationBundle;
+package Operations;
 
 import Model.Employee;
 
@@ -50,16 +50,22 @@ public class CRUDOperations
             return -1;
     }
 
-    public static List<String> display(Connection conn) throws SQLException
+    public static List<Employee> display(Connection conn) throws SQLException
     {
+
         PreparedStatement stmt=conn.prepareStatement("select * from employee");
         ResultSet rs=stmt.executeQuery();
         String result;
-        List<String> list=new ArrayList<>();
+        List<Employee> list=new ArrayList<>();
         while(rs.next())
         {
-            result=rs.getInt(1)+" "+rs.getString(2)+" "+rs.getString(3)+" "+rs.getInt(4)+" "+rs.getString(5);
-            list.add(result);
+            Employee emp = new Employee();
+            emp.setId(rs.getInt(1));
+            emp.setName(rs.getString(2));
+            emp.setCity(rs.getString(3));
+            emp.setAge(rs.getInt(4));
+            emp.setDeptName(rs.getString(5));
+            list.add(emp);
         }
 
        return list;
